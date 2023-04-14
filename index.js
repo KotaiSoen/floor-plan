@@ -7,16 +7,16 @@ require('dotenv').config();
 const app = express();
 
 app.get('/', async (req, res) => {
-
-   res.send('Welcome');
-
-    
+   res.send('Welcome');    
 });
 
 app.get('/floor-plan', async (req, res) => {
 
+    if (!req.query.text) {
+        return res.status(400).send('Text query not provided');
+    }
+
     const text = req.query.text;
-    const imageUrl = req.query.imageUrl;
 
     const configuration = new Configuration({
         apiKey: process.env.OPENAI_API_KEY,
@@ -27,8 +27,6 @@ app.get('/floor-plan', async (req, res) => {
     n: 1,
     size: "1024x1024",
     });
-
-    console.log(response.data.data[0].url);
 
     res.status(200).end(response.data.data[0].url);
     
