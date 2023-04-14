@@ -1,11 +1,19 @@
 const express = require('express');
-// const axios = require('axios');
 const { Configuration, OpenAIApi } = require("openai");
+const https = require('https');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
 
 app.get('/', async (req, res) => {
+
+   res.send('Welcome');
+
+    
+});
+
+app.get('/floor-plan', async (req, res) => {
 
     const text = req.query.text;
     const imageUrl = req.query.imageUrl;
@@ -20,10 +28,11 @@ app.get('/', async (req, res) => {
     size: "1024x1024",
     });
 
-    console.log(response.data);
+    console.log(response.data.data[0].url);
 
-    res.status(200).json(response.data)
-})
+    res.status(200).end(response.data.data[0].url);
+    
+});
 
 const port = process.env.PORT || 3000;
 
